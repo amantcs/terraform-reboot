@@ -81,9 +81,9 @@ resource "azurerm_windows_virtual_machine" "example" {
   name                = "example-machine"
   resource_group_name = azurerm_resource_group.app-group.name
   location            = azurerm_resource_group.app-group.location
-  size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "Voidmain@7907"
+  size                = var.vm_size
+  admin_username      = var.vm_admin_user
+  admin_password      = var.vm_password
   network_interface_ids = [
     azurerm_network_interface.nic01.id
   ]
