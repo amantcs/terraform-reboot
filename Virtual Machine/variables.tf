@@ -21,3 +21,10 @@ variable "vm_size" {
   type = string
   default = "Standard_B2s"
 }
+
+variable "vm_name" {
+  description = "VM Name"
+  type = string
+  default = "example-machine"
+
+}

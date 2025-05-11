@@ -78,7 +78,7 @@ resource "azurerm_subnet_network_security_group_association" "subnet02_nsg" {
 }
 
 resource "azurerm_windows_virtual_machine" "example" {
-  name                = "example-machine"
+  name                = var.vm_name
   resource_group_name = azurerm_resource_group.app-group.name
   location            = azurerm_resource_group.app-group.location
   size                = var.vm_size
@@ -99,4 +99,20 @@ resource "azurerm_windows_virtual_machine" "example" {
     sku       = "2025-Datacenter"
     version   = "latest"
   }
+}
+
+resource "azurerm_managed_disk" "datadisk01" {
+  name                 = "${var.vm_name}-disk1"
+  location             = azurerm_resource_group.app-group.location
+  resource_group_name  = azurerm_resource_group.app-group.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 4
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "datadisk01_vm01" {
+  managed_disk_id    = azurerm_managed_disk.datadisk01.id
+  virtual_machine_id = azurerm_windows_virtual_machine.example.id
+  lun                = "10"
+  caching            = "ReadWrite"
 }
