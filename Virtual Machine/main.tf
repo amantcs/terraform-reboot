@@ -85,7 +85,8 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_username      = var.vm_admin_user
   admin_password      = var.vm_password
   network_interface_ids = [
-    azurerm_network_interface.nic01.id
+    azurerm_network_interface.nic01.id,
+    azurerm_network_interface.nic02.id
   ]
 
   os_disk {
@@ -115,4 +116,16 @@ resource "azurerm_virtual_machine_data_disk_attachment" "datadisk01_vm01" {
   virtual_machine_id = azurerm_windows_virtual_machine.example.id
   lun                = "10"
   caching            = "ReadWrite"
+}
+
+resource "azurerm_network_interface" "nic02" {
+  name                = "webinterface02"
+  location            = azurerm_resource_group.app-group.location
+  resource_group_name = azurerm_resource_group.app-group.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.subnet01.id
+    private_ip_address_allocation = "Dynamic"
+  }
 }
