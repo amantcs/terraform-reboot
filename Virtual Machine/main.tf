@@ -41,9 +41,6 @@ resource "azurerm_network_interface" "nic01" {
   }
 }
 
-output "subnet01_id" {
-  value = azurerm_subnet.subnet01.id
-}
 
 resource "azurerm_public_ip" "pub_ip01" {
   name                = "webpublicip"
