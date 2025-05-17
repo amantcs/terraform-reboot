@@ -53,8 +53,9 @@ resource "azurerm_network_security_group" "nsg01" {
   name                = "terra-nsg"
   location            = azurerm_resource_group.app-group.location
   resource_group_name = azurerm_resource_group.app-group.name
+}
 
-  security_rule {
+resource "azurerm_network_security_rule" "AllowRDP" {
     name                       = "AllowRDP"
     priority                   = 300
     direction                  = "Inbound"
@@ -64,7 +65,22 @@ resource "azurerm_network_security_group" "nsg01" {
     destination_port_range     = "3389"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  }
+  resource_group_name         = azurerm_resource_group.app-group.name
+  network_security_group_name = azurerm_network_security_group.nsg01.name
+}
+
+resource "azurerm_network_security_rule" "AllowHTTP" {
+    name                       = "AllowHTTP"
+    priority                   = 310
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  resource_group_name         = azurerm_resource_group.app-group.name
+  network_security_group_name = azurerm_network_security_group.nsg01.name
 }
 
 resource "azurerm_subnet_network_security_group_association" "subnet01_nsg" {
@@ -85,8 +101,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_username      = var.vm_admin_user
   admin_password      = var.vm_password
   network_interface_ids = [
-    azurerm_network_interface.nic01.id,
-    azurerm_network_interface.nic02.id
+    azurerm_network_interface.nic01.id
   ]
 
   os_disk {
@@ -99,33 +114,5 @@ resource "azurerm_windows_virtual_machine" "example" {
     offer     = "WindowsServer"
     sku       = "2025-Datacenter"
     version   = "latest"
-  }
-}
-
-resource "azurerm_managed_disk" "datadisk01" {
-  name                 = "${var.vm_name}-disk1"
-  location             = azurerm_resource_group.app-group.location
-  resource_group_name  = azurerm_resource_group.app-group.name
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 4
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "datadisk01_vm01" {
-  managed_disk_id    = azurerm_managed_disk.datadisk01.id
-  virtual_machine_id = azurerm_windows_virtual_machine.example.id
-  lun                = "10"
-  caching            = "ReadWrite"
-}
-
-resource "azurerm_network_interface" "nic02" {
-  name                = "webinterface02"
-  location            = azurerm_resource_group.app-group.location
-  resource_group_name = azurerm_resource_group.app-group.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet01.id
-    private_ip_address_allocation = "Dynamic"
   }
 }
