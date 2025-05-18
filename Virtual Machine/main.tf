@@ -99,7 +99,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   location            = azurerm_resource_group.app-group.location
   size                = var.vm_size
   admin_username      = var.vm_admin_user
-  admin_password      = var.vm_password
+  admin_password      = data.azurerm_key_vault_secret.example.value
   network_interface_ids = [
     azurerm_network_interface.nic01.id
   ]

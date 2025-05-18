@@ -8,12 +8,6 @@ variable "vm_admin_user" {
   type = string
 }
 
-variable "vm_password" {
-  description = "vm password"
-  type = string
-  sensitive = true
-}
-
 
 
 variable "vm_size" {
