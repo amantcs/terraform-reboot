@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+      - learning
+  workflow_dispatch:
+
+jobs:
+    terraformplan:
+        runs_on: ubuntu-latest
+
