@@ -24,11 +24,11 @@ jobs:
 
         - name: Terraform Init
           run: terraform init
-          working-directory: ./Virtual Machine
+          working-directory: "./Virtual Machine"
 
         - name: Terraform Plan
           run: terraform plan
-          working-directory: ./Virtual Machine
+          working-directory: "./Virtual Machine"
 
           
 
