@@ -5,6 +5,19 @@ on:
   workflow_dispatch:
 
 jobs:
-    terraformplan:
-        runs_on: ubuntu-latest
+    terraform:
+      runs_on: ubuntu-latest
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4.2.2
+
+        - name: HashiCorp - Setup Terraform
+          uses: hashicorp/setup-terraform@v2.0.3
+
+        - name: Azure Login
+          uses: Azure/login@v2.3.0
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
 
