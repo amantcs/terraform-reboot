@@ -1,9 +1,9 @@
 name: terra-build
 
 on:
-  push:
-    branches:
-      - learning
+#  push:
+#    branches:
+#      - learning
   workflow_dispatch:
 
 jobs:
