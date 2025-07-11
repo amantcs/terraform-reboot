@@ -3,6 +3,10 @@ variable "environment" {
   type        = string
 }
 
+variable "resource_group_name" {
+  type = string
+}
+
 variable "vm_admin_user" {
   description = "admin username for windows VM"
   type = string
